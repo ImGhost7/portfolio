@@ -1,10 +1,16 @@
 ---
 // 01 · Background & Philosophy: story, working principles, education / training timeline.
+import { Image } from 'astro:assets';
 import data from '../data/content.json';
 import { rich, fmt, isTodo, live } from '../lib/rich.js';
 
 const { person, about } = data;
 const timeline = live(about.timeline);
+
+// The small ID-style photo on the profile card: the first picture in src/assets/card/ (a 4:5 portrait, 400 x 500 is plenty).
+// With no picture there, the card is just text, as before.
+const cardPhotos = import.meta.glob('/src/assets/card/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+const cardPhoto = Object.entries(cardPhotos).sort(([a], [b]) => a.localeCompare(b)).map(([, img]) => img)[0];
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const progress = (p) => {
@@ -27,9 +33,14 @@ const progress = (p) => {
     <span class="dl dl--2 is-outline" data-parallax="3"><span class="dl__in">Signal out.</span></span>
   </p>
 
-  <aside class="tag-card" data-reveal aria-label="Profile card">
+  <aside class:list={['tag-card', { 'has-photo': !!cardPhoto }]} data-reveal aria-label="Profile card">
     <p class="tag-card__top mono"><span>File no. 0001</span><i aria-hidden="true"></i></p>
     <p class="tag-card__name">{person.first}<br />{person.last}</p>
+    {cardPhoto && (
+      <figure class="tag-card__photo">
+        <Image src={cardPhoto} alt="" width={108} height={135} densities={[1, 1.5, 2, 3]} format="webp" quality={84} loading="lazy" decoding="async" />
+      </figure>
+    )}
     <dl class="tag-card__kv mono">
       <div><dt>Class</dt><dd>{person.classShort}</dd></div>
       <div><dt>Base</dt><dd>{person.base.split(',')[0]}</dd></div>

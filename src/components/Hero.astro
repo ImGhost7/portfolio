@@ -1,17 +1,32 @@
 ---
 // 00 · Index. The poster: giant name, portrait (your photo if src/assets/photo.* exists), pitch, readouts.
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import data from '../data/content.json';
 import { rich } from '../lib/rich.js';
 
 const { person, hero } = data;
 
-// Drop your photo at src/assets/photo.jpg (.jpeg / .png / .webp) and it is picked up automatically.
-const photos = import.meta.glob('/src/assets/photo.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
-const photo = Object.values(photos)[0];
+// Your photos live in src/assets/portrait/: square pictures on the page's black, used exactly as shot (nothing is cut out).
+// The first file (alphabetical order) is the main portrait; any further files are the angles that take over, one after
+// another, as you scroll (a slow head turn). A single src/assets/photo.jpg (.png / .webp) also still works.
+const portraitFiles = import.meta.glob('/src/assets/portrait/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+const singlePhoto = import.meta.glob('/src/assets/photo.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+const frames = Object.entries(portraitFiles).sort(([a], [b]) => a.localeCompare(b)).map(([, img]) => img);
+const photo = frames[0] ?? Object.values(singlePhoto)[0];
+
+const sizes = '(max-width: 1080px) 130vw, 64vw';
+const turnWidths = [640, 960, 1280];
+const quality = 84;   // hair is fine detail: a touch above the usual 78 keeps every curl crisp
+const turns = await Promise.all(
+  frames.slice(1).map(async (f) => {
+    const made = await Promise.all(turnWidths.map((w) => getImage({ src: f, width: w, format: 'webp', quality })));
+    return { src: made[1].src, srcset: made.map((m, i) => `${m.src} ${turnWidths[i]}w`).join(', ') };
+  })
+);
+const turnData = turns.length ? JSON.stringify({ sizes, turns }) : undefined;
 ---
 
-<section id="hero" class="hero" aria-labelledby="hero-name" data-sec="00" data-name="Index" data-short="Index">
+<section id="hero" class:list={['hero', { 'hero--photo': !!photo }]} aria-labelledby="hero-name" data-sec="00" data-name="Index" data-short="Index">
 
   <div class="hero__l">
     <p class="kicker mono"><i class="blip" aria-hidden="true"></i>{hero.kicker}</p>
@@ -39,17 +54,20 @@ const photo = Object.values(photos)[0];
   <figure class:list={['portrait', { 'has-photo': !!photo }]} data-portrait>
     <div class="portrait__plate" aria-hidden="true"></div>
     <div class="portrait__frame">
-      <div class="portrait__media">
-        <canvas class="smoke" data-smoke="hero" aria-hidden="true"></canvas>
+      <div class="portrait__media" data-frames={turnData}>
+        {/* the animated smoke: with a photo it drifts around the first (hero) picture only; without one it is the silhouette's backdrop */}
+        {photo
+          ? <canvas class="smoke smoke--photo" data-smoke="hero-photo" aria-hidden="true"></canvas>
+          : <canvas class="smoke" data-smoke="hero" aria-hidden="true"></canvas>}
         {photo ? (
           <Image
-            class="portrait__img"
+            class="portrait__img portrait__img--main"
             src={photo}
             alt={person.photoAlt}
-            widths={[480, 720, 960, 1280]}
-            sizes="(max-width: 1080px) 90vw, 32vw"
+            widths={[640, 960, 1280]}
+            sizes={sizes}
             format="webp"
-            quality={78}
+            quality={quality}
             loading="eager"
             decoding="async"
             fetchpriority="high"

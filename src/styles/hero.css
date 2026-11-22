@@ -60,23 +60,41 @@
 @keyframes focus-pull { from { filter: blur(30px) brightness(.45); transform: scale(1.14); } }
 
 .smoke { position: absolute; inset: 0; width: 100%; height: 100%; background: radial-gradient(120% 80% at 50% 100%, #1b1b1b, #080808 72%); }
-.portrait__img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+/* The photo is a square, head-and-shoulders plate (head about 57% of its height). It is sized so the head
+   (hair to chin) fits in the part of the frame the giant name does not cover: --F is that free height. */
+.portrait__media { --F: calc(100% - var(--fs) * .88); }
+.portrait__img {
+  position: absolute; left: 50%; max-width: none;
+  width: auto; aspect-ratio: 1 / 1;
+  height: calc((var(--F) - 38px) / .57);
+  top: calc(26px - .251 * (var(--F) - 38px));
+  transform: translateX(-50%);
+}
 /* silhouette is sized by panel HEIGHT so the bust keeps its proportions on any panel shape;
    the shoulder path is drawn far wider than the viewBox and overflows to fill the sides */
 .portrait__sil { position: absolute; top: 0; left: 50%; height: 100%; width: auto; aspect-ratio: 400 / 640; transform: translateX(-50%); overflow: visible; }
-.portrait__img { object-fit: cover; object-position: 50% 14%; filter: grayscale(1) contrast(1.14) brightness(.92); }
+.portrait__img { object-fit: cover; }
+/* scroll turn: the other angles are stacked on top and fade in one by one (see scripts/portrait.js) */
+.portrait__img--alt { opacity: 0; }
+.portrait__img--alt.is-on { opacity: 1; }
+.portrait__img.is-flash { animation: shutter .38s ease-out; }
+@keyframes shutter { 0% { filter: brightness(2.2) contrast(1.25) blur(2px); } 40% { filter: brightness(1.4) blur(.5px); } 100% { filter: none; } }
 .portrait.has-photo .portrait__sil { display: none; }
-.portrait.has-photo .smoke { mix-blend-mode: screen; opacity: .55; z-index: 1; }
+/* smoke gathers low in the frame (behind the name); the face itself stays clear and crisp */
+.portrait.has-photo .smoke {
+  mix-blend-mode: screen; opacity: .5; z-index: 1;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 40%, #000 80%); mask-image: linear-gradient(to bottom, transparent 40%, #000 80%);
+}
 .portrait.has-photo .portrait__media::after {
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(115deg, rgba(225, 6, 0, .34), rgba(225, 6, 0, 0) 52%); mix-blend-mode: screen;
+  background: linear-gradient(115deg, rgba(225, 6, 0, .24), rgba(225, 6, 0, 0) 42%); mix-blend-mode: screen;
 }
 
 .portrait__frame::before {   /* vignette + scanlines */
   content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(10, 10, 10, .62), rgba(10, 10, 10, 0) 24%, rgba(10, 10, 10, 0) 52%, rgba(10, 10, 10, .92)),
-    repeating-linear-gradient(to bottom, rgba(236, 232, 224, .05) 0 1px, transparent 1px 3px);
+    linear-gradient(to bottom, rgba(10, 10, 10, .5), rgba(10, 10, 10, 0) 22%, rgba(10, 10, 10, 0) 52%, rgba(10, 10, 10, .92)),
+    repeating-linear-gradient(to bottom, rgba(236, 232, 224, .035) 0 1px, transparent 1px 3px);
 }
 
 .vf { position: absolute; z-index: 4; width: 20px; height: 20px; border: 0 solid rgba(236, 232, 224, .8); pointer-events: none; transition: border-color .4s; }
@@ -169,6 +187,7 @@
     margin: 12px calc(var(--m) + 14px) 0 var(--m);
   }
   .portrait__plate { transform: translate(14px, 14px); animation-name: plate-out-sm; }
+  .portrait__media { --F: calc(100% - var(--fs) * .66); }   /* the name overlaps less on phones and tablets */
   .hero__name {
     position: relative; order: 2; left: auto; right: auto; bottom: auto;
     margin-top: calc(var(--fs) * -.66);
@@ -200,4 +219,80 @@
   .band--b { top: 40%; height: 40px; transform: rotate(2deg); }
   .band li { font-size: 1.7rem; }
   .band--b li { font-size: 1.2rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Portrait, version 3: your own studio photos, big and borderless, straight on the page. Each picture is a square on the
+   page's own black (its edges already dissolve into it), so there is no frame, plate or cut-out: the light, the red
+   edge-light and every curl are exactly as shot. The head turns as you scroll (scripts/portrait.js).
+   ══════════════════════════════════════════════════════════════════ */
+.portrait.has-photo .portrait__plate,
+.portrait.has-photo .portrait__frame::before,
+.portrait.has-photo .portrait__media::after,
+.portrait.has-photo .vf { display: none; }
+.portrait.has-photo .portrait__frame { clip-path: none; overflow: visible; background: none; }
+.portrait.has-photo .portrait__img { z-index: 1; filter: none; transition: opacity .75s ease; }
+.portrait.has-photo .portrait__img--alt { z-index: 2; }   /* later angles stack on top of earlier ones */
+.portrait.has-photo .portrait__img.is-flash { animation: none; }
+/* the smoke (hero picture only): the same square as the photo, laid over it as light (screen). The shader keeps it off the
+   face and hair and fades it before the square's edges (see fx.js), so no box shows. It fades in once its first frame is drawn. */
+.portrait.has-photo .smoke--photo {
+  position: absolute; inset: auto; z-index: 3; pointer-events: none; max-width: none; background: none; mix-blend-mode: screen;
+  left: 50%; transform: translateX(-50%); width: auto; aspect-ratio: 1 / 1;
+  height: calc((var(--F) - 38px) / .57); top: calc(26px - .251 * (var(--F) - 38px));
+  opacity: 0; transition: opacity 2.6s ease;
+}
+.portrait.has-photo .smoke--photo.is-live { opacity: 1; }
+
+/* phones and tablets: the portrait is the first thing on the page, as wide as the screen; the name overlaps its lower edge */
+@media (max-width: 1080px) {
+  .portrait.has-photo { width: auto; margin: 0; height: min(104vw, 66svh); min-height: 0; }
+  .portrait.has-photo .portrait__img {
+    left: 50%; transform: translateX(-50%); width: auto; max-width: none; aspect-ratio: 1 / 1;
+    height: calc((var(--F) - 22px) / .506);
+    top: calc(16px - .265 * (var(--F) - 22px));
+  }
+  .portrait.has-photo .smoke--photo { height: calc((var(--F) - 22px) / .506); top: calc(16px - .265 * (var(--F) - 22px)); }
+  .portrait.has-photo .ph--tl { left: 18px; top: 16px; }
+  .portrait.has-photo .ph--tr { right: 18px; top: 16px; }
+  .portrait.has-photo .ph--bl { left: 18px; top: 36px; bottom: auto; }
+  .portrait.has-photo .ph--br { right: 18px; top: 36px; bottom: auto; }
+}
+
+/* desktop: face on the right half, text on the left, the name low on the left */
+@media (min-width: 1081px) {
+  .hero--photo { --fs: min(14.4vw, 30svh); }
+  .portrait.has-photo { left: auto; right: 0; top: 0; bottom: 0; width: 66vw; }
+  .portrait.has-photo .portrait__img {
+    left: auto; right: -6vw; top: -4%; transform: none; max-width: none;
+    height: 112%; width: auto; aspect-ratio: 1 / 1;
+  }
+  .portrait.has-photo .smoke--photo { left: auto; right: -6vw; top: -4%; transform: none; height: 112%; }
+  .portrait.has-photo .ph--tl { left: 37%; top: 15svh; }
+  .portrait.has-photo .ph--bl { left: 37%; top: calc(15svh + 22px); }
+  .portrait.has-photo .ph--tr { right: 19%; top: 15svh; }
+  .portrait.has-photo .ph--br { right: 19%; top: calc(15svh + 22px); }
+  .hero--photo .hero__r { left: var(--m); right: auto; width: min(31vw, 450px); }
+  /* the operator table sits beside the pitch (top row, left of the face), clear of the face and of the clock in the corner */
+  .hero--photo .hero__l {
+    left: calc(var(--m) + min(31vw, 450px) + 3vw); right: auto; bottom: auto;
+    top: calc(var(--hh) + clamp(26px, 6.5svh, 76px)); width: min(14vw, 250px);
+  }
+  .hero--photo .kv > div { grid-template-columns: 64px 1fr; gap: 8px; }
+  .hero--photo .hero__name { right: auto; }
+  .hero--photo .hero__name .dl--2 { text-align: left; margin-right: 0; padding-left: calc(var(--m) + 5vw); }
+}
+
+/* The photo is sized by the window's HEIGHT, so in a narrow or squarish window (under 1280 px wide, or less wide than 16:10) the
+   operator table has no room between the pitch and the hair: it steps aside there (the "Session 0001" label stays, and the
+   same facts are on the profile card further down). Measured against the real hair outline on 270 window sizes. */
+@media (min-width: 1081px) and (max-width: 1279px), (min-width: 1081px) and (max-aspect-ratio: 159/100) {
+  .hero--photo .hero__l .kv { display: none; }
+}
+
+/* landscape tablets and small windows use the stacked layout in a short screen: size the name and picture by the screen's
+   HEIGHT too, so the whole name and the whole face are on the first screen (the pitch follows just below) */
+@media (max-width: 1080px) and (orientation: landscape) {
+  .hero { --fs: min(27.2vw, 22svh); }
+  .portrait.has-photo { height: min(104vw, 60svh); }
 }

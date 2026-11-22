@@ -254,9 +254,9 @@ body::after {   /* soft floor under the bottom HUD so labels stay legible over c
   pointer-events: none;
 }
 .top > * { pointer-events: auto; }
-.top::before {
+.top::before {   /* a dark band behind the menu that holds, then fades out, so text scrolling underneath never collides with the labels */
   content: ""; position: absolute; inset: 0 0 -26px 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(to bottom, rgba(10, 10, 10, .9), rgba(10, 10, 10, 0));
+  background: linear-gradient(to bottom, rgba(10, 10, 10, .95) 0, rgba(10, 10, 10, .95) 50%, rgba(10, 10, 10, .45) 78%, rgba(10, 10, 10, 0) 100%);
 }
 
 .brand { display: flex; align-items: center; gap: 16px; }
