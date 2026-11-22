@@ -181,9 +181,18 @@ Your password is typed into GitHub's own page, never into the terminal.
    repository when GitHub asks.
 3. Pick `ImGhost7/portfolio`. The build settings fill themselves in from `netlify.toml`
    (**Build command** `npm run build`, **Publish directory** `dist`). Click **Deploy**.
-4. After about a minute you get a live address like `https://something.netlify.app`.
-5. **Project configuration → Change project name** lets you choose the name (that name becomes the address).
+4. After about a minute you get a live address like `https://yourname.netlify.app`.
+5. **New projects start private.** Only you, signed in to Netlify, can see them; everyone else gets a Netlify
+   login page (error 401). To open the site to everyone: open the project → **Project configuration → General →
+   Visitor access → Project visibility**, set **production deploys** to **Public** and click **Save**. (Once the
+   first deploy has succeeded there is also a **Make public** button on the project page.) Check it by opening
+   the address in a private/incognito window: you should see the site, not a login page.
+6. A small **"Powered by Netlify" badge** may appear on public free-plan projects created after August 2026.
+   You can switch it off under **Project configuration → General → Powered by Netlify badge**.
+7. **Project configuration → Change project name** lets you choose the name (that name becomes the address).
    If you change it, follow "Change the site address" below so search engines and link previews use the new one.
+8. Contact form: open **Forms** in the project menu. If it says form detection is off, click **Enable form
+   detection**, then run a new deploy (**Deploys → Trigger deploy**). The `contact` form appears after that deploy.
 
 From now on, every `git push` redeploys automatically.
 
@@ -274,6 +283,7 @@ Built in on purpose:
 | A project does not show on the live site | It has `"draft": true`. Remove that line, commit, push |
 | **Forms** in Netlify shows nothing | Deploy once after the form exists, then reload the page. Submit a test message |
 | `git push` asks who you are or is rejected | Make sure you are signed in to GitHub (a browser window opens the first time) |
+| The live site asks for a Netlify login (error 401) | The project is still private. Make it public (section 5b, step 5) |
 | `fatal: not a git repository` | You are in the wrong folder. `cd` into the `Portfolio` folder first |
 
 If something is not covered here, the Netlify deploy log (Deploys → the failed deploy) almost always says

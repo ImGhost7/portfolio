@@ -55,7 +55,7 @@ const og = h(
       h('div', { fontFamily: 'IBM Plex Mono', fontSize: '25px', color: '#c8c4bb', letterSpacing: '0.02em' }, 'ML systems that read, reason, and catch what humans miss.'),
       h('div', { fontFamily: 'IBM Plex Mono', fontSize: '17px', color: MUTE, letterSpacing: '0.14em', marginTop: '14px' }, 'GRAPH LEARNING / NLP / APPLIED AI  ·  MUMBAI 19.07°N 72.87°E'),
     ]),
-    h('div', { position: 'absolute', right: '64px', bottom: '50px', fontFamily: 'IBM Plex Mono', fontSize: '17px', letterSpacing: '0.14em', color: MUTE }, HOST),
+    h('div', { position: 'absolute', right: '64px', bottom: '50px', fontFamily: 'IBM Plex Mono', fontSize: `${Math.max(11, Math.min(17, Math.floor(330 / (HOST.length * 0.74))))}px`, letterSpacing: '0.14em', color: MUTE }, HOST),
   ]
 );
 
