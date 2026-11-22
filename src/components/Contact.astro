@@ -1,0 +1,123 @@
+---
+// 05 · COMM.LINK: beacon image, links, and the contact form (Netlify Forms).
+import data from '../data/content.json';
+
+const { person, contact } = data;
+const f = contact.form;
+
+// Lattice mast silhouette under the beacon light, drawn once at build time.
+const L = 14;
+const H = 400;
+const xl = (y) => 28 - 22 * (y / H);
+const xr = (y) => 32 + 22 * (y / H);
+const n = (v) => v.toFixed(2);
+let mast = `M${n(xl(H))} ${H}L${n(xl(0))} 0M${n(xr(H))} ${H}L${n(xr(0))} 0`;
+for (let i = 0; i < L; i++) {
+  const y1 = H - (i * H) / L;
+  const y2 = H - ((i + 1) * H) / L;
+  mast += `M${n(xl(y1))} ${n(y1)}L${n(xr(y2))} ${n(y2)}M${n(xr(y1))} ${n(y1)}L${n(xl(y2))} ${n(y2)}M${n(xl(y1))} ${n(y1)}L${n(xr(y1))} ${n(y1)}`;
+}
+mast += 'M30 0L30 -16';
+---
+
+<section id="contact" class="sec contact" aria-labelledby="contact-h" data-sec="05" data-name="COMM.LINK" data-short="Comm.link">
+  <div class="sec__head">
+    <span class="sec__idx mono"><b>05</b> / 05</span>
+    <h2 class="sec__name mono" id="contact-h">COMM.LINK</h2>
+    <span class="sec__rule" aria-hidden="true"></span>
+    <span class="sec__coord mono" aria-hidden="true">Channel 01 · open</span>
+  </div>
+
+  <div class="contact__stage">
+    <figure class="beacon" aria-hidden="true">
+      <canvas class="smoke" data-smoke="beacon"></canvas>
+      <svg class="beacon__mast" viewBox="0 0 60 400" preserveAspectRatio="none" focusable="false"><path d={mast} /></svg>
+      <figcaption class="mono"><span><i class="blip" aria-hidden="true"></i>Transmitting</span><span>CH.01 · {person.geo.lat} {person.geo.lon}</span></figcaption>
+    </figure>
+
+    <div class="contact__copy">
+      <p class="display contact__display">
+        <span class="dl dl--1"><span class="dl__in">{contact.headline[0]}</span></span>
+        <span class="dl dl--2 is-outline"><span class="dl__in">{contact.headline[1]}</span></span>
+      </p>
+      <p class="contact__sub" data-split>{contact.text}</p>
+
+      <ul class="links">
+        <li class="links__row">
+          <a class="xl" href={`mailto:${person.email}`} data-cursor="MAIL">
+            <span class="xl__k mono">Email</span>
+            <span class="xl__v">{person.email}</span>
+            <svg class="ico" aria-hidden="true"><use href="#i-ur" /></svg>
+          </a>
+          <button class="copy mono" type="button" data-copy={person.email} data-cursor="COPY">
+            <span data-copy-label>Copy</span><span class="sr-only" aria-live="polite" data-copy-live></span>
+          </button>
+        </li>
+        <li class="links__row">
+          <a class="xl" href={person.github.url} target="_blank" rel="noopener noreferrer" data-cursor="OPEN">
+            <span class="xl__k mono">GitHub</span>
+            <span class="xl__v">{person.github.label}</span>
+            <svg class="ico" aria-hidden="true"><use href="#i-ur" /></svg><span class="sr-only">(opens in a new tab)</span>
+          </a>
+        </li>
+        <li class="links__row">
+          <a class="xl" href={person.linkedin.url} target="_blank" rel="noopener noreferrer" data-cursor="OPEN">
+            <span class="xl__k mono">LinkedIn</span>
+            <span class="xl__v">{person.linkedin.label}</span>
+            <svg class="ico" aria-hidden="true"><use href="#i-ur" /></svg><span class="sr-only">(opens in a new tab)</span>
+          </a>
+        </li>
+        <li class="links__row">
+          <a class="xl" href={person.resume.file} download data-cursor="PDF">
+            <span class="xl__k mono">{person.resume.label}</span>
+            <span class="xl__v">{person.resume.linkText}</span>
+            <svg class="ico" aria-hidden="true"><use href="#i-dl" /></svg>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Netlify Forms: Netlify finds this form in the built HTML and delivers messages to Site → Forms. -->
+      <div class="msg">
+        <h3 class="msg__title mono">{contact.formTitle}</h3>
+        <form
+          class="form"
+          name="contact"
+          method="POST"
+          action="/thanks/"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          data-form
+          data-send={f.send}
+          data-sending={f.sending}
+          data-success={f.success}
+          data-error={f.error}
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hp" aria-hidden="true">
+            <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
+          <div class="form__row">
+            <label class="field">
+              <span class="field__k mono">{f.name}</span>
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+            <label class="field">
+              <span class="field__k mono">{f.email}</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+          </div>
+          <label class="field">
+            <span class="field__k mono">{f.message}</span>
+            <textarea name="message" rows="4" required></textarea>
+          </label>
+          <div class="form__foot">
+            <button class="btn btn--solid" type="submit" data-cursor="SEND">
+              <span data-label>{f.send}</span> <svg class="ico" aria-hidden="true"><use href="#i-send" /></svg>
+            </button>
+            <p class="form__status mono" role="status" aria-live="polite" data-form-status></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

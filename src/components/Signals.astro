@@ -1,0 +1,61 @@
+---
+// 04 · Signals: training, research & presentations, coursework.
+import data from '../data/content.json';
+
+const s = data.signals;
+---
+
+<section id="signals" class="sec signals" aria-labelledby="signals-h" data-sec="04" data-name="Signals" data-short="Signals">
+  <div class="sec__head">
+    <span class="sec__idx mono"><b>04</b> / 05</span>
+    <h2 class="sec__name mono" id="signals-h">Signals</h2>
+    <span class="sec__rule" aria-hidden="true"></span>
+    <span class="sec__coord mono" aria-hidden="true">Training · research · coursework</span>
+  </div>
+
+  <p class="display signals__display is-outline" aria-hidden="true"><span class="dl dl--1" data-parallax="-3"><span class="dl__in">Signals</span></span></p>
+  <div class="scope" aria-hidden="true"><canvas data-viz="wave"></canvas></div>
+
+  <div class="signals__grid">
+    <article class="sig sig--cert" data-reveal aria-labelledby="s1-t">
+      <div class="stamp" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs><path id="stamp-path" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0" /></defs>
+          <text><textPath href="#stamp-path" startOffset="0">{s.training.stamp}</textPath></text>
+        </svg>
+        <b></b>
+      </div>
+      <p class="sig__type mono">{s.training.type}</p>
+      <h3 class="sig__title display" id="s1-t">{s.training.title}</h3>
+      <p class="sig__org">{s.training.text}</p>
+      <p class="sig__meta mono"><i class="blip blip--paper" aria-hidden="true"></i>{s.training.status}</p>
+      {s.training.link && (
+        <p class="sig__links mono">
+          <a class="link" href={s.training.link.url} target="_blank" rel="noopener noreferrer">
+            {s.training.link.label} <svg class="ico" aria-hidden="true"><use href="#i-ur" /></svg><span class="sr-only">(opens in a new tab)</span>
+          </a>
+        </p>
+      )}
+    </article>
+
+    <article class="sig sig--research" data-reveal aria-labelledby="s2-t">
+      <p class="sig__type mono">{s.research.type}</p>
+      <h3 class="sig__title display" id="s2-t">{s.research.title}</h3>
+      <p class="sig__org">{s.research.text}</p>
+      <div class="years" aria-hidden="true">
+        {s.research.years.map((y) => <span>{y}</span>)}
+      </div>
+      <ul class="sig__list">
+        {s.research.items.map((it) => <li><span class="mono">{it.k}</span>{it.text}</li>)}
+      </ul>
+    </article>
+
+    <article class="sig sig--course" data-reveal aria-labelledby="s3-t">
+      <p class="sig__type mono">{s.coursework.type}</p>
+      <h3 class="sig__title display" id="s3-t">{s.coursework.title}</h3>
+      <ul class="course">
+        {s.coursework.courses.map((c) => <li>{c}</li>)}
+      </ul>
+    </article>
+  </div>
+</section>

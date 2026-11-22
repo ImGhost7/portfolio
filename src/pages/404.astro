@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import data from '../data/content.json';
+
+const { person } = data;
+---
+
+<Base title={`Signal lost — ${person.name}`} description="This page does not exist." path="/404/" noindex>
+  <div class="grain" aria-hidden="true"></div>
+  <main class="solo" id="main">
+    <p class="solo__k mono"><i class="blip" aria-hidden="true"></i>Error 404</p>
+    <h1 class="solo__h display">Signal lost<span class="amp">.</span></h1>
+    <p class="solo__p">There is nothing at this address. The portfolio is one page, so the way back is short.</p>
+    <p><a class="btn btn--solid" href="/">Back to the portfolio <svg class="ico" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square" /></svg></a></p>
+  </main>
+</Base>

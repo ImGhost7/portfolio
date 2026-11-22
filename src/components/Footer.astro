@@ -1,0 +1,16 @@
+---
+import data from '../data/content.json';
+
+const { person, footer } = data;
+const now = new Date();
+const ver = `v${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}`;
+---
+
+<footer class="foot">
+  <div class="foot__row mono">
+    <span>© <span data-year>{now.getFullYear()}</span> {person.name}</span>
+    <span><span data-ver>{ver}</span> / MUMBAI {person.geo.lat} {person.geo.lon}</span>
+    <a href="#hero" data-cursor="TOP">Back to top <svg class="ico" aria-hidden="true"><use href="#i-up" /></svg></a>
+  </div>
+  <p class="foot__eot mono">{footer.end}<i class="caret" aria-hidden="true"></i></p>
+</footer>

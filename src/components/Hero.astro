@@ -1,0 +1,94 @@
+---
+// 00 · Index. The poster: giant name, portrait (your photo if src/assets/photo.* exists), pitch, readouts.
+import { Image } from 'astro:assets';
+import data from '../data/content.json';
+import { rich } from '../lib/rich.js';
+
+const { person, hero } = data;
+
+// Drop your photo at src/assets/photo.jpg (.jpeg / .png / .webp) and it is picked up automatically.
+const photos = import.meta.glob('/src/assets/photo.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+const photo = Object.values(photos)[0];
+---
+
+<section id="hero" class="hero" aria-labelledby="hero-name" data-sec="00" data-name="Index" data-short="Index">
+
+  <div class="hero__l">
+    <p class="kicker mono"><i class="blip" aria-hidden="true"></i>{hero.kicker}</p>
+    <dl class="kv mono">
+      <div><dt>Operator</dt><dd>{person.name}</dd></div>
+      <div><dt>Role</dt><dd>{person.role}</dd></div>
+      <div><dt>Class</dt><dd>{person.classLine}</dd></div>
+      <div><dt>Base</dt><dd>{person.base}</dd></div>
+    </dl>
+  </div>
+
+  <div class="hero__r">
+    <p class="hero__pitch" set:html={rich(hero.pitch)} />
+
+    <ul class="taglist mono" aria-label="Focus areas">
+      {hero.tags.map((t) => <li>{t}</li>)}
+    </ul>
+
+    <p class="hero__cta">
+      <a class="btn btn--solid" href="#work" data-cursor="GO">See deployments <svg class="ico" aria-hidden="true"><use href="#i-down"/></svg></a>
+      <a class="btn" href={person.resume.file} download data-cursor="PDF">{person.resume.label} <svg class="ico" aria-hidden="true"><use href="#i-dl"/></svg></a>
+    </p>
+  </div>
+
+  <figure class:list={['portrait', { 'has-photo': !!photo }]} data-portrait>
+    <div class="portrait__plate" aria-hidden="true"></div>
+    <div class="portrait__frame">
+      <div class="portrait__media">
+        <canvas class="smoke" data-smoke="hero" aria-hidden="true"></canvas>
+        {photo ? (
+          <Image
+            class="portrait__img"
+            src={photo}
+            alt={person.photoAlt}
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 1080px) 90vw, 32vw"
+            format="webp"
+            quality={78}
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        ) : (
+          <svg class="portrait__sil" viewBox="0 0 400 640" aria-hidden="true" focusable="false">
+            <defs>
+              <path id="sil" d="M-900 800 L-900 330 C-500 300 -150 290 -40 292 C-10 270 40 244 100 226 C140 214 170 206 182 192 L184 160 C166 150 156 124 156 96 C156 58 174 34 200 34 C226 34 244 58 244 96 C244 124 234 150 216 160 L218 192 C230 206 260 214 300 226 C360 244 410 270 440 292 C550 290 900 300 1300 330 L1300 800 Z"/>
+              <filter id="rim" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+              <linearGradient id="silfill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#060606"/><stop offset=".7" stop-color="#040404"/><stop offset="1" stop-color="#0a0a0a"/>
+              </linearGradient>
+            </defs>
+            <g transform="translate(-120 0) scale(1.6)">
+              <use href="#sil" fill="#e10600" filter="url(#rim)" transform="translate(-14 -6)" opacity=".55"/>
+              <use href="#sil" fill="url(#silfill)"/>
+              <use href="#sil" fill="none" stroke="#ece8e0" stroke-opacity=".18" stroke-width=".9"/>
+            </g>
+          </svg>
+        )}
+      </div>
+      <span class="vf vf--tl" aria-hidden="true"></span><span class="vf vf--tr" aria-hidden="true"></span>
+      <span class="vf vf--bl" aria-hidden="true"></span><span class="vf vf--br" aria-hidden="true"></span>
+      <figcaption class="portrait__hud mono" aria-hidden="true">
+        <span class="ph ph--tl">Focus <b data-focus>000</b>%</span>
+        <span class="ph ph--tr">AF · <b data-lock>seek</b></span>
+        <span class="ph ph--bl">{person.geo.lat} / {person.geo.lon}</span>
+        <span class="ph ph--br">Frame 001</span>
+      </figcaption>
+    </div>
+  </figure>
+
+  <h1 class="hero__name display" id="hero-name">
+    <span class="dl dl--1"><span class="dl__in">{person.first}</span></span>
+    <span class="dl dl--2 is-outline"><span class="dl__in">{person.last}</span></span>
+  </h1>
+
+  <div class="hero__rail mono" aria-hidden="true">
+    <span class="hero__rail-line"></span>
+    <span class="hero__rail-txt">Scroll to deploy</span>
+  </div>
+</section>

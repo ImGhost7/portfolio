@@ -1,0 +1,23 @@
+---
+// Two crossing bands: skills (paper) over project names (outlined). Decorative; the real lists live in 02 and 03.
+import data from '../data/content.json';
+import { live } from '../lib/rich.js';
+
+const skills = data.ticker.skills;
+const projects = [...live(data.projects).map((p) => p.short || p.title), data.archive[0]?.title].filter(Boolean);
+---
+
+<div class="bands" aria-hidden="true">
+  <div class="band band--b">
+    <div class="band__track band__track--rev">
+      <ul>{projects.map((p) => <li>{p}</li>)}</ul>
+      <ul>{projects.map((p) => <li>{p}</li>)}</ul>
+    </div>
+  </div>
+  <div class="band band--a">
+    <div class="band__track">
+      <ul>{skills.map((s) => <li>{s}</li>)}</ul>
+      <ul>{skills.map((s) => <li>{s}</li>)}</ul>
+    </div>
+  </div>
+</div>

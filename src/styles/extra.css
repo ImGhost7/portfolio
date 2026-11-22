@@ -1,0 +1,79 @@
+/* ══════════════════════════════════════════════════════════════════
+   extra.css — contact form, thank-you / 404 pages
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ───────── contact form ───────── */
+.msg { margin-top: clamp(40px, 5vw, 76px); }
+.msg__title { margin-bottom: 20px; color: var(--mute); }
+.form { display: grid; gap: clamp(18px, 2vw, 28px); max-width: 46rem; }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 2vw, 28px); }
+.field { display: grid; gap: 8px; }
+.field__k { color: var(--paper-2); }
+.field input, .field textarea {
+  width: 100%; padding: 13px 0 12px; border: 0; border-bottom: 1px solid var(--line-2); border-radius: 0;
+  background: transparent; color: var(--paper);
+  font: 400 1.05rem/1.4 var(--f-body); letter-spacing: -.005em;
+  transition: border-color .3s;
+}
+.field textarea { min-height: 7.5rem; resize: vertical; }
+.field input:hover, .field textarea:hover { border-bottom-color: rgba(236, 232, 224, .5); }
+.field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--signal-hi); outline-offset: 4px; border-bottom-color: var(--paper); }
+.field input:-webkit-autofill {   /* keep browser autofill from painting a light box */
+  -webkit-box-shadow: 0 0 0 1000px var(--ink) inset; -webkit-text-fill-color: var(--paper); caret-color: var(--paper);
+}
+.form__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 22px; }
+.form__status { color: var(--paper-2); }
+.form__status[data-state="ok"] { color: var(--paper); }
+.form__status[data-state="err"] { color: var(--signal-hi); }
+.form button[disabled] { opacity: .55; cursor: progress; }
+
+/* honeypot: bots fill it in, people never see it */
+.hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+/* ───────── standalone pages (thank-you, 404) ───────── */
+.solo {
+  position: relative; z-index: 1; min-height: 100vh; min-height: 100svh;
+  display: grid; align-content: center; justify-items: start; gap: 22px;
+  padding: 90px var(--m);
+}
+.solo__k { display: flex; align-items: center; color: var(--paper-2); }
+.solo__h { font-size: clamp(5rem, 20vw, 17rem); }
+.solo__p { max-width: 30em; color: var(--paper-2); font-size: clamp(1.05rem, 1.4vw, 1.3rem); }
+.solo .amp { color: var(--signal-hi); }
+
+/* the beacon image stays in view while the longer contact column scrolls past it */
+@media (min-width: 1081px) {
+  .beacon { position: sticky; top: 84px; align-self: start; }
+  .beacon figcaption { top: 16px; bottom: auto; }
+}
+
+@media (max-width: 560px) {
+  .form__row { grid-template-columns: 1fr; }
+}
+
+/* ───────── first-load speed ─────────
+   Sections below the hero are only laid out when they get close to the screen (content-visibility: auto).
+   The heights below are estimates that keep the scrollbar steady; once a section has been shown, the browser
+   remembers its real height ("auto"). main.js makes the sections real one at a time while the browser is idle
+   (class .cv-live), or all at once on the first scroll / click / key press. When none is lazy any more it adds
+   .cv-off to <html>, so anchor links and scroll effects work with exact positions.
+   If you add or remove a lot of content, update the estimates (or ignore it: it only affects the first look). */
+:root { --cv-about: 2300px; --cv-work: 2400px; --cv-matrix: 1420px; --cv-signals: 1950px; --cv-contact: 1670px; --cv-foot: 255px; }
+@media (min-width: 721px) {
+  :root { --cv-about: 1900px; --cv-work: 3800px; --cv-matrix: 1090px; --cv-signals: 1540px; --cv-contact: 1300px; --cv-foot: 195px; }
+}
+@media (min-width: 1081px) {
+  :root { --cv-about: 2085px; --cv-work: 3435px; --cv-matrix: 1545px; --cv-signals: 2130px; --cv-contact: 1840px; --cv-foot: 280px; }
+}
+@supports (content-visibility: auto) {
+  html:not(.cv-off) .sec:not(.cv-live), html:not(.cv-off) .foot:not(.cv-live) { content-visibility: auto; }
+  #about { contain-intrinsic-block-size: auto var(--cv-about); }
+  #work { contain-intrinsic-block-size: auto var(--cv-work); }
+  #matrix { contain-intrinsic-block-size: auto var(--cv-matrix); }
+  #signals { contain-intrinsic-block-size: auto var(--cv-signals); }
+  #contact { contain-intrinsic-block-size: auto var(--cv-contact); }
+  .foot { contain-intrinsic-block-size: auto var(--cv-foot); }
+}
+@media print {
+  .sec, .foot { content-visibility: visible !important; }
+}

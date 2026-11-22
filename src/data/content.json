@@ -1,0 +1,283 @@
+{
+  "_howToEdit": [
+    "THIS IS THE ONLY FILE YOU NEED TO EDIT TO CHANGE YOUR TEXT, PROJECTS AND LINKS.",
+    "1. Change only the words between the quotation marks. Keep every quote mark, comma, bracket and brace exactly where it is.",
+    "2. Wrap a word in *single stars* to make it stand out (red italic-style), or **double stars** for bold. Example: \"I build *systems*\".",
+    "3. To ADD a project: copy one whole { ... } block inside \"projects\", paste it right after another block, put a comma between the two blocks, then edit the words.",
+    "4. To HIDE something without deleting it, add \"draft\": true to that block. Drafts show up (with a red tag) on your own computer when you run `npm run dev`, but never on the live site.",
+    "5. Photo: save it as src/assets/photo.jpg (or .png / .webp) and rebuild. Résumé: replace public/Taanshu-Babariya-Resume.pdf with the new file, keeping the same name.",
+    "6. When you are done: git add . then git commit -m \"update\" then git push. Netlify republishes the site in about a minute.",
+    "7. \"site\" → \"url\" must be the real web address of the site. Change it only if the address changes (for example a custom domain); README.md lists the two other places to update.",
+    "If the site stops building after an edit, it is almost always a missing comma or quote. Paste this file into jsonlint.com and it will point at the exact line."
+  ],
+
+  "site": {
+    "url": "https://taanshu.netlify.app",
+    "title": "Taanshu Babariya — AI/ML Engineer & Builder",
+    "description": "Portfolio of Taanshu Babariya, an AI/ML engineering student at SFIT Mumbai. ML systems that read, reason and catch what humans miss: graph neural networks for fraud detection, NLP and full-stack products.",
+    "shortDescription": "ML systems that read, reason and catch what humans miss. Graph neural networks, NLP and full-stack products.",
+    "ogImage": "/og.png",
+    "ogImageAlt": "Taanshu Babariya, AI/ML engineer and builder: the name in huge white condensed type on black, with a red signal accent.",
+    "themeColor": "#0a0a0a"
+  },
+
+  "person": {
+    "name": "Taanshu Babariya",
+    "first": "Taanshu",
+    "last": "Babariya",
+    "role": "AI/ML engineering student · builder",
+    "classLine": "B.E. AI & ML — SFIT Mumbai ’28",
+    "classShort": "B.E. AI&ML ’28",
+    "focusShort": "Graph · NLP · Applied",
+    "base": "Mumbai, India",
+    "languages": "EN · HI · GU",
+    "email": "taanshubabariya@gmail.com",
+    "github": { "url": "https://github.com/ImGhost7", "label": "github.com/ImGhost7" },
+    "linkedin": { "url": "https://www.linkedin.com/in/taanshu-babariya-77bb44284", "label": "/in/taanshu-babariya" },
+    "resume": { "file": "/Taanshu-Babariya-Resume.pdf", "label": "Résumé", "linkText": "Download PDF" },
+    "geo": { "lat": "19.07°N", "lon": "72.87°E" },
+    "photoAlt": "Portrait of Taanshu Babariya"
+  },
+
+  "hero": {
+    "kicker": "Session 0001 — open",
+    "pitch": "I build ML systems that read, reason, and *catch* what humans miss.",
+    "tags": ["Graph learning", "NLP", "Applied AI"]
+  },
+
+  "ticker": {
+    "skills": [
+      "Python", "PyTorch", "PyTorch Geometric", "scikit-learn", "Graph Neural Networks",
+      "NLP", "LLM APIs", "FastAPI", "Node.js", "React", "TypeScript", "SQL", "MongoDB", "Git"
+    ]
+  },
+
+  "about": {
+    "lead": "I’m Taanshu, an AI/ML engineering student in Mumbai who turns models into working products.",
+    "paragraphs": [
+      "I’m studying Artificial Intelligence & Machine Learning at St. Francis Institute of Technology. My recent work centres on graph neural networks for financial fraud detection: I took a hackathon prototype all the way to a measured, leakage-free deep-learning study. Alongside it I completed the Krutanic AI/ML training program, built a voice-driven personal AI assistant, and delivered websites for real businesses as a freelance developer.",
+      "Most real problems are signal buried in noise — a fraud ring inside a million transactions, a strong candidate behind a weak headline, a real advance inside forty pages of “state of the art”. I like building systems that find it, and can say how they found it."
+    ],
+    "principles": [
+      "Find the signal before choosing the model.",
+      "A model should explain what it caught, and own what it missed.",
+      "Ship it so someone else can break it."
+    ],
+    "timeline": [
+      {
+        "when": "2024 — 2028",
+        "title": "B.E., Artificial Intelligence & Machine Learning",
+        "text": "St. Francis Institute of Technology (SFIT), Mumbai",
+        "current": true,
+        "progress": { "start": "2024-08-01", "end": "2028-05-31", "label": "In progress · est." }
+      },
+      {
+        "when": "Oct 2024 — 2026",
+        "title": "AI/ML Training Program",
+        "text": "Krutanic — hands-on ML practicals and a benchmark of classifiers across eight algorithm families. Completed."
+      },
+      {
+        "when": "2025 — 2026",
+        "title": "Freelance web developer",
+        "text": "Production site for Creative Techno Solutions, plus sites for Shri Hari Dairy and Adwait Media."
+      },
+      {
+        "draft": true,
+        "when": "[years]",
+        "title": "SmartAds",
+        "text": "[Founder — one line on what SmartAds does]"
+      }
+    ]
+  },
+
+  "projects": [
+    {
+      "id": "fraudscope",
+      "category": "Graph ML · Oct 2026",
+      "title": "FraudScope",
+      "subtitle": "Temporal graph learning for financial-fraud detection.",
+      "description": [
+        "Born as **FundTrace AI**, a real-time anti-money-laundering platform built for Hackathon Round 2 (PS3: Banking Fraud Detection) at K. J. Somaiya College of Engineering. An edge-aware GraphSAGE classifier, fused with a rule engine and Isolation Forest, flags layering, round-tripping, structuring and mule accounts as transactions stream in. On held-out synthetic data it reached F1 0.944 and PR-AUC 0.980, against F1 0.080 for rules alone.",
+        "Then extended into a leakage-free deep-learning study: a temporal GNN against GraphSAGE and Random Forest, on a strict past-to-future split."
+      ],
+      "chips": ["PyTorch Geometric", "GraphSAGE", "Temporal GNN", "Isolation Forest", "FastAPI", "Socket.io", "React", "MongoDB"],
+      "metrics": [
+        { "label": "Temporal GNN · F1", "value": 0.969, "decimals": 3 },
+        { "label": "GraphSAGE · F1", "value": 0.839, "decimals": 3 },
+        { "label": "Random forest · F1", "value": 0.785, "decimals": 3 }
+      ],
+      "note": "97,831 transactions · 5,000 accounts · past-to-future split · mean of 3 seeds",
+      "links": [{ "label": "GitHub", "url": "https://github.com/ImGhost7/Fraudscope" }],
+      "visual": { "type": "graph", "caption": "Fig. 01 — transaction graph · illustrative" }
+    },
+    {
+      "id": "linkedin-optimizer",
+      "short": "Profile Optimizer",
+      "category": "NLP · Team project",
+      "title": "LinkedIn Profile Optimizer & Job Matcher",
+      "description": [
+        "An NLP application that analyses and scores a LinkedIn profile, recommends rewrites, and matches the candidate to relevant job roles. A team project for the Language Modeling & Text Analytics course; I co-built it and its presentation."
+      ],
+      "chips": ["Python", "NLP", "Team project", "2026"],
+      "steps": ["Analyse", "Recommend", "Match"],
+      "links": [{ "label": "GitHub", "url": "https://github.com/ImGhost7" }],
+      "visual": {
+        "type": "profile",
+        "caption": "Fig. 02 — illustrative output",
+        "gauge": { "value": 78, "label": "Profile score" },
+        "before": "Student. Interested in ML.",
+        "after": "AI/ML engineer · graph & NLP systems",
+        "matchLabel": "JD match",
+        "matchValue": 82
+      }
+    },
+    {
+      "id": "dl-in-nlp",
+      "category": "NLP lab case study",
+      "title": "Deep Learning in NLP",
+      "subtitle": "A review of recent papers, 2022–2026.",
+      "description": [
+        "A close reading of three connected recent technical papers on deep learning in NLP, sourced via ResearchRabbit, Springer and arXiv, and written up as a technical case study."
+      ],
+      "chips": ["Research review", "Case study", "NLP", "arXiv", "Springer", "ResearchRabbit"],
+      "metrics": [
+        { "label": "Papers reviewed", "value": 3, "decimals": 0, "max": 3 },
+        { "label": "Years covered", "value": 5, "decimals": 0, "max": 5 }
+      ],
+      "links": [],
+      "visual": { "type": "attn", "caption": "Fig. 03 — attention map · illustrative" }
+    },
+    {
+      "draft": true,
+      "id": "smartads",
+      "category": "Applied AI",
+      "title": "SmartAds",
+      "subtitle": "[One line: what SmartAds does]",
+      "description": ["[What I built — your contribution, in one or two sentences]"],
+      "chips": ["[Stack]", "[Stack]"],
+      "metrics": [{ "label": "[Metric name]", "value": 64, "decimals": 0, "suffix": "%", "max": 100 }],
+      "links": [],
+      "visual": { "type": "pending", "caption": "Figure pending" }
+    },
+    {
+      "id": "jarvis",
+      "category": "Applied AI · Sep 2026",
+      "title": "Jarvis",
+      "subtitle": "Personal voice AI assistant.",
+      "description": [
+        "A self-hosted voice and chat assistant: say “Jarvis” to wake it, talk hands-free, hear spoken replies. It swaps between Gemini and Claude with automatic fallback when a quota runs out, keeps persistent memory, tasks and timed reminders, and searches local documents."
+      ],
+      "chips": ["Node.js", "JavaScript", "Web Speech API", "Gemini", "Claude"],
+      "metrics": [
+        { "label": "Languages · EN HI GU", "value": 3, "decimals": 0, "max": 3 },
+        { "label": "LLM providers", "value": 2, "decimals": 0, "max": 2 }
+      ],
+      "links": [{ "label": "GitHub", "url": "https://github.com/ImGhost7" }],
+      "visual": { "type": "bars", "caption": "Fig. 05 — voice level · decorative" }
+    }
+  ],
+
+  "archive": [
+    {
+      "when": "2025",
+      "title": "Medilock",
+      "kind": "Healthcare records platform",
+      "text": "Patient records, appointments and medication tracking, with record uploads and a patient dashboard. JWT auth, role-based access, rate limiting and request validation behind a Swagger-documented API. Deployed on Vercel.",
+      "stack": "React · TypeScript · Node.js · Express · MongoDB"
+    },
+    {
+      "when": "2025 — 26",
+      "title": "Freelance web development",
+      "kind": "Real clients",
+      "text": "Built and deployed the production website for Creative Techno Solutions, an industrial filtration company in Mumbai, with an Express backend; plus websites for Shri Hari Dairy and Adwait Media.",
+      "link": { "label": "ctsolutions.in", "url": "https://ctsolutions.in" },
+      "stack": "React · TypeScript · Tailwind · Vercel"
+    },
+    {
+      "when": "Earlier",
+      "title": "Face-recognition attendance",
+      "kind": "Computer vision",
+      "text": "Enrols each user from images at multiple facial angles and marks attendance through face-recognition authentication.",
+      "stack": "Python · Computer vision"
+    },
+    {
+      "when": "In progress",
+      "live": true,
+      "title": "Email Tone Replier",
+      "kind": "NLP",
+      "text": "Reads an email’s context, classifies its tone and drafts a reply in an appropriate professional tone.",
+      "stack": "Python · NLP"
+    }
+  ],
+
+  "matrix": [
+    {
+      "name": "ML",
+      "sub": "Machine learning",
+      "tools": ["PyTorch", "scikit-learn", "XGBoost / LightGBM", "Isolation Forest", "Pandas / NumPy", "Computer vision"]
+    },
+    {
+      "name": "NLP",
+      "sub": "Language & LLMs",
+      "tools": ["Text classification", "Tone analysis", "LLM APIs · Gemini, Claude", "Prompt & persona design"]
+    },
+    {
+      "name": "Graph",
+      "sub": "Graph learning",
+      "tools": ["Graph neural networks", "PyG · GraphSAGE", "Temporal GNNs", "NetworkX"]
+    },
+    {
+      "name": "Eng",
+      "sub": "Engineering",
+      "tools": ["Python · Java · C++", "SQL · MongoDB", "FastAPI", "Node.js / Express", "React / TypeScript", "Git / GitHub", "Vercel · Render"]
+    }
+  ],
+
+  "signals": {
+    "training": {
+      "type": "SIG-01 · Training",
+      "title": "AI/ML Training Program",
+      "text": "Krutanic · Oct 2024 – 2026. Hands-on ML practicals, a benchmark of classifiers across eight algorithm families, and a Python coding assessment.",
+      "status": "Status: completed",
+      "stamp": "KRUTANIC · AI/ML TRAINING PROGRAM · COMPLETED · ",
+      "link": { "label": "All work on GitHub", "url": "https://github.com/ImGhost7/Krutanic" }
+    },
+    "research": {
+      "type": "SIG-02 · Research & presentations",
+      "title": "Deep Learning in NLP",
+      "text": "NLP lab case study: three connected recent papers, sourced via ResearchRabbit, Springer and arXiv.",
+      "years": ["2022", "2023", "2024", "2025", "2026"],
+      "items": [
+        { "k": "Lit. review", "text": "Temporal & relational GNNs for transactions, presented for the FraudScope mini-project." },
+        { "k": "Hackathon", "text": "Round 2 at K. J. Somaiya College of Engineering: pitched FundTrace AI with a live demo." }
+      ]
+    },
+    "coursework": {
+      "type": "SIG-03 · Coursework",
+      "title": "B.E. AI & ML — SFIT",
+      "courses": [
+        "Machine Learning", "Deep Learning", "Natural Language Processing",
+        "Language Modeling & Text Analytics", "Data Structures & Algorithms", "Database Management Systems"
+      ]
+    }
+  },
+
+  "contact": {
+    "headline": ["Got a signal", "worth catching?"],
+    "text": "I’m looking for internships and roles in AI/ML engineering, NLP and full-stack development. Collaborations and messy datasets welcome.",
+    "formTitle": "Or send a message",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send message",
+      "sending": "Sending…",
+      "success": "Message received — I’ll reply to your email soon.",
+      "error": "That didn’t go through. Please email me directly instead."
+    }
+  },
+
+  "footer": {
+    "end": "End of transmission"
+  }
+}

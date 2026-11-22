@@ -1,0 +1,85 @@
+---
+// 01 · Background & Philosophy: story, working principles, education / training timeline.
+import data from '../data/content.json';
+import { rich, fmt, isTodo, live } from '../lib/rich.js';
+
+const { person, about } = data;
+const timeline = live(about.timeline);
+
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const progress = (p) => {
+  const a = new Date(p.start).getTime();
+  const b = new Date(p.end).getTime();
+  return Math.round(clamp((Date.now() - a) / (b - a), 0, 1) * 100);
+};
+---
+
+<section id="about" class="sec about" aria-labelledby="about-h" data-sec="01" data-name="Background & Philosophy" data-short="Background">
+  <div class="sec__head">
+    <span class="sec__idx mono"><b>01</b> / 05</span>
+    <h2 class="sec__name mono" id="about-h">Background &amp; Philosophy</h2>
+    <span class="sec__rule" aria-hidden="true"></span>
+    <span class="sec__coord mono" aria-hidden="true">N {person.geo.lat.replace('N', '')} · E {person.geo.lon.replace('E', '')}</span>
+  </div>
+
+  <p class="display about__display">
+    <span class="dl dl--1" data-parallax="-3"><span class="dl__in">Noise in.</span></span>
+    <span class="dl dl--2 is-outline" data-parallax="3"><span class="dl__in">Signal out.</span></span>
+  </p>
+
+  <aside class="tag-card" data-reveal aria-label="Profile card">
+    <p class="tag-card__top mono"><span>File no. 0001</span><i aria-hidden="true"></i></p>
+    <p class="tag-card__name">{person.first}<br />{person.last}</p>
+    <dl class="tag-card__kv mono">
+      <div><dt>Class</dt><dd>{person.classShort}</dd></div>
+      <div><dt>Base</dt><dd>{person.base.split(',')[0]}</dd></div>
+      <div><dt>Focus</dt><dd>{person.focusShort}</dd></div>
+      <div><dt>Lang</dt><dd>{person.languages}</dd></div>
+      <div><dt>State</dt><dd>Building</dd></div>
+    </dl>
+  </aside>
+
+  <span class="about__num" aria-hidden="true"><b>01</b></span>
+
+  <div class="about__story">
+    <p class="lead" data-split set:html={rich(about.lead)} />
+    {about.paragraphs.map((p) => <p data-split set:html={fmt(p)} />)}
+
+    <ol class="principles" aria-label="Working principles">
+      {about.principles.map((p, i) => (
+        <li data-reveal><span class="mono">P-{String(i + 1).padStart(2, '0')}</span>{p}</li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="tl">
+    <h3 class="tl__title mono">Education &amp; training log</h3>
+    <ol class="tl__track" style={`--cols:${timeline.length}`}>
+      {timeline.map((t, i) => (
+        <li
+          class:list={['tl__item', { 'is-now': t.current }]}
+          data-reveal
+          style={i ? `--d:${i * 120}ms` : undefined}
+          data-draft={t.draft ? 'needs your details' : undefined}
+        >
+          <span class="tl__when mono">{isTodo(t.when) ? <span class="todo">{t.when}</span> : t.when}</span>
+          <span class="tl__node" aria-hidden="true"></span>
+          <h4 class="tl__h">{t.title}</h4>
+          <p class="tl__p" set:html={fmt(t.text)} />
+          {t.progress && (
+            <p
+              class="tl__prog mono"
+              data-degree
+              data-start={t.progress.start}
+              data-end={t.progress.end}
+              style={`--p:${(progress(t.progress) / 100).toFixed(3)}`}
+            >
+              <span class="tl__prog-l">{t.progress.label}</span>
+              <b class="num" data-to={progress(t.progress)} data-dec="0" data-suffix="%">{progress(t.progress)}%</b>
+            </p>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

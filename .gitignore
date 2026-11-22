@@ -1,0 +1,15 @@
+# dependencies + build output (rebuilt on every deploy)
+node_modules/
+dist/
+.astro/
+.netlify/
+
+# editor / OS noise
+.DS_Store
+Thumbs.db
+*.log
+
+# local-only folders: not part of the website, never pushed
+reference/
+legacy-static/
+.claude/

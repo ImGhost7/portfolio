@@ -1,0 +1,89 @@
+---
+// Fixed page furniture: skip link, ambient layers, header, mobile menu, corner HUD, icon sprite.
+import data from '../data/content.json';
+import { pad } from '../lib/rich.js';
+
+const { person } = data;
+const now = new Date();
+const ver = `v${now.getFullYear()}.${pad(now.getMonth() + 1)}`; // JS keeps it current in the browser
+
+const nav = [
+  { id: 'about', num: '01', label: 'About', menu: 'Background' },
+  { id: 'work', num: '02', label: 'Deployments', menu: 'Deployments' },
+  { id: 'matrix', num: '03', label: 'Matrix', menu: 'Matrix' },
+  { id: 'signals', num: '04', label: 'Signals', menu: 'Signals' },
+  { id: 'contact', num: '05', label: 'Comm.link', menu: 'Comm.link' },
+];
+---
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ambient layers -->
+<div class="guides" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-bar" aria-hidden="true"><i></i></div>
+<div class="cursor" aria-hidden="true">
+  <span class="cursor__ring"><b class="cursor__label"></b></span>
+  <span class="cursor__dot"></span>
+</div>
+
+<!-- header -->
+<header class="top">
+  <a class="brand" href="#hero" aria-label={`${person.name} — back to top`} data-cursor="TOP">
+    <span class="brand__mark">TB</span>
+    <span class="brand__meta mono"><span data-ver>{ver}</span> / MUMBAI {person.geo.lat}</span>
+  </a>
+
+  <nav class="nav" aria-label="Primary">
+    <ol>
+      {nav.map((n) => (
+        <li><a href={`#${n.id}`} data-nav={n.id}><i>{n.num}</i>{n.label}</a></li>
+      ))}
+    </ol>
+  </nav>
+
+  <button class="menu-btn mono" type="button" aria-expanded="false" aria-controls="menu">
+    <span class="menu-btn__t" data-menu-label>Menu</span><i aria-hidden="true"></i>
+  </button>
+</header>
+
+<!-- full-screen menu (phones) -->
+<div class="menu" id="menu" aria-hidden="true" inert>
+  <nav aria-label="Menu">
+    <ol>
+      <li><a href="#hero"><i>00</i><span>Index</span></a></li>
+      {nav.map((n) => (
+        <li><a href={`#${n.id}`}><i>{n.num}</i><span>{n.menu}</span></a></li>
+      ))}
+    </ol>
+  </nav>
+  <p class="menu__foot mono">
+    <a href={`mailto:${person.email}`}>Email</a>
+    <a href={person.github.url} target="_blank" rel="noopener noreferrer">GitHub<span class="sr-only"> (opens in a new tab)</span></a>
+    <a href={person.linkedin.url} target="_blank" rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>
+  </p>
+</div>
+
+<!-- corner HUD: section counter + live IST clock + status -->
+<div class="hud-bar">
+  <aside class="hud hud--bl mono" aria-hidden="true">
+    <span class="hud__idx"><b data-hud-idx>00</b> / 05</span>
+    <span class="hud__name" data-hud-name>Index</span>
+    <span class="hud__pct" data-hud-pct>000%</span>
+  </aside>
+
+  <aside class="hud hud--br mono" aria-label="Live status">
+    <span class="hud__clock"><span class="dim hud__tz">IST</span> <time data-clock>--:--:--</time></span>
+    <span class="hud__status"><i class="blip" aria-hidden="true"></i><span class="hud__lbl">status: </span>building</span>
+    <button class="hud__motion" type="button" aria-pressed="true" data-motion-toggle>motion: on</button>
+  </aside>
+</div>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-ur" viewBox="0 0 24 24"><path d="M6 18 18 6M8 6h10v10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v16M5 13l7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V4M5 11l7-7 7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"/></symbol>
+</svg>

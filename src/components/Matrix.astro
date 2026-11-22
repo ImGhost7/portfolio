@@ -1,0 +1,35 @@
+---
+// 03 · The Systems Matrix: skills grouped ML / NLP / Graph / Engineering.
+import data from '../data/content.json';
+import { pad } from '../lib/rich.js';
+
+const groups = data.matrix;
+const total = groups.reduce((n, g) => n + g.tools.length, 0);
+---
+
+<section id="matrix" class="sec matrix" aria-labelledby="matrix-h" data-sec="03" data-name="The Systems Matrix" data-short="Matrix">
+  <div class="sec__head">
+    <span class="sec__idx mono"><b>03</b> / 05</span>
+    <h2 class="sec__name mono" id="matrix-h">The Systems Matrix</h2>
+    <span class="sec__rule" aria-hidden="true"></span>
+    <span class="sec__coord mono" aria-hidden="true">{total} tools · {groups.length} stacks</span>
+  </div>
+
+  <p class="display matrix__display" aria-hidden="true">
+    <span class="dl dl--1 is-outline" data-parallax="-2"><span class="dl__in">The Systems</span></span>
+    <span class="dl dl--2" data-parallax="3"><span class="dl__in">Matrix</span></span>
+  </p>
+
+  <div class="matrix__grid">
+    {groups.map((g, i) => (
+      <article class="grp" aria-labelledby={`g${i + 1}`}>
+        <p class="grp__top mono"><span>SYS-{pad(i + 1)}</span><span>{pad(g.tools.length)} tools</span></p>
+        <h3 class="grp__name display" id={`g${i + 1}`}>{g.name}</h3>
+        <p class="grp__sub mono">{g.sub}</p>
+        <ul class="grp__list">
+          {g.tools.map((t, k) => <li data-cursor=""><span class="mono">{pad(k + 1)}</span>{t}</li>)}
+        </ul>
+      </article>
+    ))}
+  </div>
+</section>
