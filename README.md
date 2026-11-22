@@ -1,5 +1,7 @@
 # Taanshu Babariya — Portfolio
 
+**Live site:** https://taanshuportfolio.netlify.app · **Code:** https://github.com/ImGhost7/portfolio
+
 A one-page personal portfolio: dark, cinematic, one signal-red accent. It is a **static website** (plain
 HTML, CSS and a little JavaScript, no server, no database) built with [Astro](https://astro.build) and
 hosted on [Netlify](https://www.netlify.com). The code lives on GitHub; every time you push a change there,
@@ -227,8 +229,10 @@ The form on the page is a [Netlify Form](https://docs.netlify.com/forms/setup/):
 
 * People fill in name, email and message. A hidden "honeypot" field catches most spam bots.
 * Messages arrive in Netlify → your project → **Forms** → **contact**.
-* To get an email for each message: **Forms → Form notifications → Add notification → Email notification**,
-  choose the `contact` form and enter your address.
+* To get an email for each message: **Forms → Submission notifications → Add notification → Email notification**,
+  choose the `contact` form and enter your address. If it is not your Netlify login address, Netlify first sends
+  that address a confirmation email, and nothing is delivered until you click **Confirm**. Hitting Reply on a
+  notification answers the visitor (the form's email field becomes the Reply-to).
 * The form is detected when the site is built, so the **Forms** page only shows `contact` after a deploy has
   finished. The free plan has a monthly limit on submissions; see Netlify's pricing page.
 * Test it once after deploying: send yourself a message, then check **Forms**.
