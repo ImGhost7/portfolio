@@ -34,8 +34,8 @@
     "email": "taanshubabariya@gmail.com",
     "github": { "url": "https://github.com/ImGhost7", "label": "github.com/ImGhost7" },
     "linkedin": { "url": "https://www.linkedin.com/in/taanshu-babariya-77bb44284", "label": "/in/taanshu-babariya" },
-    "resume": { "file": "/Taanshu-Babariya-Resume.pdf", "label": "Résumé", "linkText": "Download PDF" },
-    "cv": { "file": "/Taanshu-Babariya-CV.pdf", "label": "CV", "linkText": "Download PDF · full detail" },
+    "resume": { "file": "/Taanshu-Babariya-Resume.pdf", "label": "Résumé", "linkText": "Download Résumé" },
+    "cv": { "file": "/Taanshu-Babariya-CV.pdf", "label": "CV", "linkText": "Download CV" },
     "geo": { "lat": "19.07°N", "lon": "72.87°E" },
     "photoAlt": "Portrait of Taanshu Babariya"
   },
