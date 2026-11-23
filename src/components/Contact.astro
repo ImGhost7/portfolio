@@ -74,6 +74,15 @@ mast += 'M30 0L30 -16';
             <svg class="ico" aria-hidden="true"><use href="#i-dl" /></svg>
           </a>
         </li>
+        {person.cv && (
+          <li class="links__row">
+            <a class="xl" href={person.cv.file} download data-cursor="PDF">
+              <span class="xl__k mono">{person.cv.label}</span>
+              <span class="xl__v">{person.cv.linkText}</span>
+              <svg class="ico" aria-hidden="true"><use href="#i-dl" /></svg>
+            </a>
+          </li>
+        )}
       </ul>
 
       <!-- Netlify Forms: Netlify finds this form in the built HTML and delivers messages to Site → Forms. -->

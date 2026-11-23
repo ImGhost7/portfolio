@@ -54,6 +54,7 @@ Portfolio/
 │   └── pages/                   ← index (the site), thanks (after the form), 404
 ├── public/
 │   ├── Taanshu-Babariya-Resume.pdf   ← EDIT THIS: the résumé people download (replace the file)
+│   ├── Taanshu-Babariya-CV.pdf       ← EDIT THIS: the longer CV people can download (replace the file)
 │   ├── og.png, favicon.*, apple-touch-icon.png   ← link-preview image + icons (made by `npm run og`)
 │   └── robots.txt               ← tells search engines where the sitemap is
 ├── scripts/make-og.mjs          ← generates the link-preview image and icons
@@ -174,13 +175,21 @@ published). They reached me through chat at about 1400 px wide, so bigger origin
 large and retina screens. Update `"photoAlt"` in `content.json` if you want a different description of the hero
 photo for screen readers.
 
-### Your résumé
+### Your résumé and CV
 
-Replace **`public/Taanshu-Babariya-Resume.pdf`** with the new file **using the same file name**. Both the hero
-and the contact section link to it.
+Two PDFs are offered for download:
 
-> **Everything inside `public/` is public.** Anyone can download the PDF. Before you publish, open it and
-> check that it only contains details you are happy to share (for example your phone number).
+| File | Where it is linked |
+| --- | --- |
+| **`public/Taanshu-Babariya-Resume.pdf`**: the short résumé (3 pages) | the "Résumé" button in the hero and the "Résumé" row in the contact section |
+| **`public/Taanshu-Babariya-CV.pdf`**: the full CV (6 pages) | the "CV" row in the contact section (`"cv"` in `content.json`) |
+
+To update either one, replace the file **using the same file name**. (If you ever want to hide the CV row, delete the
+`"cv"` line in `content.json`.) The résumé that was live before 23 Nov 2026 is kept in the private `reference/` folder.
+
+> **Everything inside `public/` is public.** Anyone can download the PDFs, and they are also visible in your public
+> GitHub repository. Before you publish, open them and check that they only contain details you are happy to share
+> (both currently show your phone number, email and CGPA).
 
 ### Colours, fonts, layout
 
