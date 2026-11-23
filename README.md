@@ -45,7 +45,8 @@ Portfolio/
 ├── src/
 │   ├── data/
 │   │   └── content.json         ← EDIT THIS: all your words, projects, skills and links
-│   ├── assets/                  ← EDIT THIS: put your photo here as photo.jpg (see "Your photo")
+│   ├── assets/portrait/         ← EDIT THIS: your hero photo (see "Your photos")
+│   ├── assets/card/             ← EDIT THIS: the small photo on the profile card (see "Your photos")
 │   ├── components/              ← the page sections (Hero, About, Deployments …)
 │   ├── styles/                  ← the look: colours, type, layout
 │   ├── scripts/                 ← the motion: smooth scroll, reveals, cursor, clock
@@ -132,11 +133,38 @@ Where things are inside `content.json`:
 
 After editing, look at the result in `npm run dev`, then publish (section 6).
 
-### Your photo
+### Your photos
 
-Save a portrait as **`src/assets/photo.jpg`** (`.png` or `.webp` also work). It is picked up automatically and
-shown in the hero. Until then, a dark silhouette is shown. Portrait orientation (taller than wide) looks best.
-Also update `"photoAlt"` in `content.json` if you want a different description for screen readers.
+Two places use your own studio photos, **exactly as you shot and edited them**: nothing is cut out and nothing is
+retouched, so every curl, the red edge-light and the colour grade are yours.
+
+**1. The hero portrait: `src/assets/portrait/`.** Each picture is a square on the page's own black, and its edges
+fade into that black, so your face sits straight on the page like a film still (no frame, no box).
+
+| File | What it is |
+| --- | --- |
+| `1-front.webp` | The hero portrait (straight to camera, black and white). It is the first thing visitors see and it is the picture in the link preview. |
+
+The top of the page stays black and white because this folder holds only that one picture. Files are picked up in
+alphabetical order: the first is the hero portrait and any further files become a **scroll turn** (they fade in one
+after another as someone starts to scroll). Your two colour shots (looking up and away) are set aside in
+`reference/photos/hero-turn-frames/` as `2-turn.webp` and `3-turn.webp`; copy them back into
+`src/assets/portrait/` to switch the turn on again. If the folder is empty, a single `src/assets/photo.jpg` is
+used, and without any photo a dark silhouette is shown. With "reduce motion" on only the first picture is shown.
+
+To use a different hero photo, make it a **square, 1280 × 1280 picture on a black background** (WebP, JPG or PNG)
+with the head a little above the middle (hair about 13% from the top, chin about 64%), and the edges fading into
+pure black (`#0a0a0a`) so no box shows (with several shots, keep the **eyes in the same spot** in each so the turn
+lines up). The easy way is to ask Claude: "put this photo on the portrait canvas".
+
+**2. The profile card in the About section: `src/assets/card/id.webp`.** A small ID-style picture beside your name,
+a **4:5 portrait, 400 × 500 px**, cropped from your colour shot. Replace the file (keep the name) to change it;
+delete it and the card is text only.
+
+Your untouched originals are kept in `reference/photos/` (that folder stays on your computer and is never
+published). They reached me through chat at about 1400 px wide, so bigger originals would look even sharper on
+large and retina screens. Update `"photoAlt"` in `content.json` if you want a different description of the hero
+photo for screen readers.
 
 ### Your résumé
 

@@ -1,7 +1,9 @@
 // Generates the link-preview image (public/og.png) and the favicons from the site's own fonts.
 // Re-run any time with:  npm run og
 import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import satori from 'satori';
+import sharp from 'sharp';
 import { Resvg } from '@resvg/resvg-js';
 
 const font = (p) => fs.readFileSync(new URL(`../node_modules/${p}`, import.meta.url));
@@ -31,13 +33,26 @@ const guides = [0, 1, 2, 3, 4, 5, 6].map((i) =>
   h('div', { position: 'absolute', left: `${64 + i * (1072 / 6)}px`, top: '0px', width: '1px', height: '630px', background: 'rgba(236,232,224,0.05)' })
 );
 
+// top right: your main portrait (the first file in src/assets/portrait/, a transparent cut-out), or the red rings if there is none
+let portraitUri = null;
+const portraitDir = fileURLToPath(new URL('../src/assets/portrait/', import.meta.url));
+const portraitFile = fs.existsSync(portraitDir)
+  ? fs.readdirSync(portraitDir).filter((f) => /\.(png|jpe?g|webp)$/i.test(f)).sort()[0]
+  : null;
+if (portraitFile) {
+  const buf = await sharp(portraitDir + portraitFile).resize(540, 540).flatten({ background: INK }).jpeg({ quality: 90 }).toBuffer();   // cut-out onto the page black
+  portraitUri = 'data:image/jpeg;base64,' + buf.toString('base64');
+}
+const rightArt = portraitUri
+  ? [{ type: 'img', props: { src: portraitUri, width: 540, height: 540, style: { position: 'absolute', left: '690px', top: '-58px', width: '540px', height: '540px' } } }]
+  : [...rings, h('div', { position: 'absolute', left: '1000px', top: '140px', width: '20px', height: '20px', borderRadius: '9999px', background: RED })];
+
 const og = h(
   'div',
   { width: '1200px', height: '630px', display: 'flex', position: 'relative', background: INK, overflow: 'hidden' },
   [
     ...guides,
-    ...rings,
-    h('div', { position: 'absolute', left: '1000px', top: '140px', width: '20px', height: '20px', borderRadius: '9999px', background: RED }),
+    ...rightArt,
 
     h('div', { position: 'absolute', left: '64px', top: '46px', display: 'flex', alignItems: 'center' }, [
       h('div', { fontFamily: 'Anton', fontSize: '40px', color: PAPER, lineHeight: 1 }, 'TB'),

@@ -9,6 +9,7 @@ import { initCursor } from './cursor.js';
 import { initReveals, initParallax, initCounts, parallaxMedia } from './reveal.js';
 import { initTilt, initCopy, initDeck, initForm } from './interact.js';
 import { initFX } from './fx.js';
+import { initPortraitTurn, initPortraitHud } from './portrait.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -143,6 +144,7 @@ function boot() {
   document.addEventListener('tb:motion-off', killMotion);
   root.classList.add('gsap-ready');
   heroIntro();
+  timed('portrait', () => { initPortraitHud(); initPortraitTurn(); });
 
   // heavy visuals (WebGL smoke, canvases) wait until the page is idle, so the first paint stays fast
   const startFx = () => timed('fx', initFX);
