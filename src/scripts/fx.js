@@ -53,6 +53,9 @@ import { qsa, clamp, lerp, reduced, tick, visible } from './tb.js';
     'precision mediump float;',
     '#endif',
     'uniform vec2 uRes; uniform float uTime; uniform vec2 uBeacon; uniform float uAmt; uniform float uWarm; uniform vec3 uLight;',
+    /* hero photo: base level, red lean left→right, protected head ellipse (cx, cy, rx, ry) + how much smoke stays over it,
+       drift speed, density thresholds, bottom/top weight, soft edges of the square (left, right, top, bottom; off when left = 0) */
+    'uniform float uBase; uniform vec2 uWarmX; uniform vec4 uHead; uniform float uHole; uniform float uSpeed; uniform vec4 uBox; uniform vec2 uCut; uniform vec2 uYW; uniform float uTone;',
     'float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }',
     'float noise(vec2 p){',
     '  vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f);',
@@ -68,15 +71,18 @@ import { qsa, clamp, lerp, reduced, tick, visible } from './tb.js';
     '  vec2 uv = gl_FragCoord.xy / uRes;',
     '  float asp = uRes.x / uRes.y;',
     '  vec2 p = vec2(uv.x * asp, uv.y) * 1.5;',
-    '  float t = uTime * 0.045;',
+    '  float t = uTime * 0.045 * uSpeed;',
     '  vec2 q = vec2(fbm(p + vec2(0.0, -t)), fbm(p + vec2(5.2, 1.3) + t * 0.7));',
     '  vec2 r = vec2(fbm(p + 2.2 * q + vec2(1.7, 9.2) + t * 0.9), fbm(p + 2.2 * q + vec2(8.3, 2.8) - t * 0.6));',
     '  float f = fbm(p + 2.4 * r);',
-    '  float dens = smoothstep(0.28, 0.95, f) * uAmt;',
-    '  dens *= mix(0.5, 1.15, 1.0 - smoothstep(0.0, 0.9, uv.y));',
-    '  vec3 col = vec3(0.026);',
+    '  float dens = smoothstep(uCut.x, uCut.y, f) * uAmt;',
+    '  dens *= mix(uYW.x, uYW.y, 1.0 - smoothstep(0.0, 0.9, uv.y));',
+    /* the smoke thins out over the head (hair + face) so every curl stays crisp, and fades before the edges of its square */
+    '  dens *= mix(uHole, 1.0, smoothstep(1.0, 1.7, length((uv - uHead.xy) / uHead.zw)));',
+    '  if (uBox.x > 0.0) dens *= smoothstep(0.0, uBox.x, uv.x) * smoothstep(0.0, uBox.y, 1.0 - uv.x) * smoothstep(0.0, uBox.z, 1.0 - uv.y) * smoothstep(0.0, uBox.w, uv.y);',
+    '  vec3 col = vec3(uBase);',
     '  col += vec3(0.56, 0.55, 0.53) * dens * 0.30;',
-    '  col += vec3(0.55, 0.02, 0.0) * dens * uWarm * 0.30 * smoothstep(0.2, 0.9, f);',
+    '  col += vec3(0.55, 0.02, 0.0) * dens * uWarm * mix(uWarmX.x, uWarmX.y, uv.x) * 0.30 * smoothstep(0.2, 0.9, f);',
     '  if (uLight.z > 0.0) {',   /* stage light behind the subject: smoke-modulated haze so a dark silhouette reads */
     '    vec2 ld = (uv - uLight.xy) * vec2(asp * 0.85, 1.0);',
     '    float lg = exp(-pow(length(ld) / 0.46, 2.0));',
@@ -97,15 +103,22 @@ import { qsa, clamp, lerp, reduced, tick, visible } from './tb.js';
     '  }',
     '  vec2 vc = uv - 0.5;',
     '  col *= 1.0 - smoothstep(0.25, 1.1, length(vc * vec2(1.0, 1.2)));',
+    '  if (uTone > 0.0) col = 1.0 - exp(-uTone * col);',   /* soft curve: thin smoke stays visible, dense smoke is not blown out */
     '  gl_FragColor = vec4(col, 1.0);',
     '}',
   ].join('\n');
 
   function initSmoke(canvas) {
-    const beacon = canvas.dataset.smoke === 'beacon';
-    const cfg = beacon
-      ? { amt: 1.55, warm: 0.3, at: [0.61, 0.65], light: [0.61, 0.5, 0], scale: 0.7 }
-      : { amt: 1.0, warm: 0.6, at: null, light: [0.5, 0.64, 0.85], scale: 0.6 };
+    const kind = canvas.dataset.smoke;
+    const plain = { base: 0.026, warmX: [1, 1], head: [0.5, 0.5, 1, 1], hole: 1, speed: 1, box: [0, 0, 0, 0], cut: [0.28, 0.95], yw: [0.5, 1.15], tone: 0 };
+    const cfg = kind === 'beacon'
+      ? { ...plain, amt: 1.55, warm: 0.3, at: [0.61, 0.65], light: [0.61, 0.5, 0], scale: 0.7 }
+      : kind === 'hero-photo'
+        // the hero photo: smoke added as light around the head and over the shoulders. The head ellipse is where the face and
+        // hair sit in the picture (centre 50% across, 40% down; y here counts from the bottom); the smoke leans red on the
+        // right, where the photo's own red edge-light is.
+        ? { amt: 3.0, warm: 0.75, at: null, light: [0.5, 0.5, 0], scale: 0.5, base: 0, warmX: [0.35, 1.5], head: [0.5, 0.6, 0.29, 0.34], hole: 0.06, speed: 1.5, box: [0.34, 0.14, 0.22, 0.3], cut: [0.16, 0.58], yw: [0.75, 1.0], tone: 2.4 }
+        : { ...plain, amt: 1.0, warm: 0.6, at: null, light: [0.5, 0.64, 0.85], scale: 0.6 };
     // failIfMajorPerformanceCaveat: if the browser would only be able to software-render WebGL
     // (no real GPU: some headless/test environments), skip it. The CSS gradient behind stays.
     const gl = canvas.getContext('webgl', { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
@@ -128,7 +141,9 @@ import { qsa, clamp, lerp, reduced, tick, visible } from './tb.js';
     gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = (n) => gl.getUniformLocation(prog, n);
     const uRes = U('uRes'), uTime = U('uTime'), uBeacon = U('uBeacon'), uAmt = U('uAmt'), uWarm = U('uWarm'), uLight = U('uLight');
+    const uBase = U('uBase'), uWarmX = U('uWarmX'), uHead = U('uHead'), uHole = U('uHole'), uSpeed = U('uSpeed'), uBox = U('uBox'), uCut = U('uCut'), uYW = U('uYW'), uTone = U('uTone');
     const st = makeCanvas(canvas, { scale: cfg.scale, dprCap: 1.5 });
+    let shown = false;
 
     run(canvas, st, (t) => {
       gl.viewport(0, 0, st.w, st.h);
@@ -138,7 +153,18 @@ import { qsa, clamp, lerp, reduced, tick, visible } from './tb.js';
       gl.uniform1f(uAmt, cfg.amt);
       gl.uniform1f(uWarm, cfg.warm);
       gl.uniform3f(uLight, cfg.light[0], cfg.light[1], cfg.light[2]);
+      gl.uniform1f(uBase, cfg.base);
+      gl.uniform2f(uWarmX, cfg.warmX[0], cfg.warmX[1]);
+      gl.uniform4f(uHead, cfg.head[0], cfg.head[1], cfg.head[2], cfg.head[3]);
+      gl.uniform1f(uHole, cfg.hole);
+      gl.uniform1f(uSpeed, cfg.speed);
+      gl.uniform4f(uBox, cfg.box[0], cfg.box[1], cfg.box[2], cfg.box[3]);
+      gl.uniform2f(uCut, cfg.cut[0], cfg.cut[1]);
+      gl.uniform2f(uYW, cfg.yw[0], cfg.yw[1]);
+      gl.uniform1f(uTone, cfg.tone);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+      // the first frame is on the canvas: let it fade in (CSS .is-live) instead of popping in
+      if (!shown) { shown = true; requestAnimationFrame(() => canvas.classList.add('is-live')); }
     }, 9.0, 30);
   }
 
@@ -360,7 +386,7 @@ export function initFX() {
     }, { rootMargin: '400px 0px' });
     io.observe(el);
   };
-  qsa('canvas[data-smoke]').forEach((c) => (c.dataset.smoke === 'hero' ? initSmoke(c) : lazy(c, initSmoke)));
+  qsa('canvas[data-smoke]').forEach((c) => (c.dataset.smoke.startsWith('hero') ? initSmoke(c) : lazy(c, initSmoke)));
   const map = { graph: initGraph, attn: initAttn, bars: initBars, wave: initWave };
   qsa('canvas[data-viz]').forEach((c) => { const fn = map[c.dataset.viz]; if (fn) lazy(c, fn); });
 }

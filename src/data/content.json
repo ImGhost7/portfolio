@@ -5,7 +5,7 @@
     "2. Wrap a word in *single stars* to make it stand out (red italic-style), or **double stars** for bold. Example: \"I build *systems*\".",
     "3. To ADD a project: copy one whole { ... } block inside \"projects\", paste it right after another block, put a comma between the two blocks, then edit the words.",
     "4. To HIDE something without deleting it, add \"draft\": true to that block. Drafts show up (with a red tag) on your own computer when you run `npm run dev`, but never on the live site.",
-    "5. Photo: save it as src/assets/photo.jpg (or .png / .webp) and rebuild. Résumé: replace public/Taanshu-Babariya-Resume.pdf with the new file, keeping the same name.",
+    "5. Photos: the hero portrait is src/assets/portrait/1-front.webp (a square 1280x1280 picture on a black background; extra files in that folder become a scroll turn), and the small photo on the profile card is src/assets/card/id.webp (4:5, 400x500). Replace them keeping the names (README.md explains how they are made). Résumé: replace public/Taanshu-Babariya-Resume.pdf with the new file, keeping the same name.",
     "6. When you are done: git add . then git commit -m \"update\" then git push. Netlify republishes the site in about a minute.",
     "7. \"site\" → \"url\" must be the real web address of the site. Change it only if the address changes (for example a custom domain); README.md lists the two other places to update.",
     "If the site stops building after an edit, it is almost always a missing comma or quote. Paste this file into jsonlint.com and it will point at the exact line."
@@ -17,7 +17,7 @@
     "description": "Portfolio of Taanshu Babariya, an AI/ML engineering student at SFIT Mumbai. ML systems that read, reason and catch what humans miss: graph neural networks for fraud detection, NLP and full-stack products.",
     "shortDescription": "ML systems that read, reason and catch what humans miss. Graph neural networks, NLP and full-stack products.",
     "ogImage": "/og.png",
-    "ogImageAlt": "Taanshu Babariya, AI/ML engineer and builder: the name in huge white condensed type on black, with a red signal accent.",
+    "ogImageAlt": "Taanshu Babariya, AI/ML engineer and builder: the name in huge white condensed type on black, beside a black-and-white portrait lit with a thin red edge-light.",
     "themeColor": "#0a0a0a"
   },
 
@@ -186,7 +186,7 @@
       "stack": "React · TypeScript · Node.js · Express · MongoDB"
     },
     {
-      "when": "2025 — 26",
+      "when": "2025 — 2026",
       "title": "Freelance web development",
       "kind": "Real clients",
       "text": "Built and deployed the production website for Creative Techno Solutions, an industrial filtration company in Mumbai, with an Express backend; plus websites for Shri Hari Dairy and Adwait Media.",
